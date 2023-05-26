@@ -4,7 +4,7 @@ const ApiError = require('../utils/apiError');
 const ProductModel = require('../models/productModel');
 
 //@desc create new product
-//@route /api/v1/categories
+//@route /api/v1/products
 //@access private
 exports.createProduct = asyncHandler(async (req, res) => {
   const {name} = req.body;
@@ -12,19 +12,19 @@ exports.createProduct = asyncHandler(async (req, res) => {
   res.status(201).json({ Data: product });
 });
 
-//@desc get all categories
-//@route POST /api/v1/categories
+//@desc get all products
+//@route POST /api/v1/products
 //@access public
-exports.getCategories = asyncHandler(async (req, res) => {
+exports.getProducts = asyncHandler(async (req, res) => {
   const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || 5;
   const skip = (page - 1) * limit;
-  const categories = await ProductModel.find({}).skip(skip).limit(limit);
-  res.status(200).json({ Results: categories.length, page, Data: categories });
+  const products = await ProductModel.find({}).skip(skip).limit(limit);
+  res.status(200).json({ Results: products.length, page, Data: products });
 });
 
 //@desc get specific product by id
-//@route get /api/v1/categories/:id
+//@route get /api/v1/products/:id
 //@access public
 
 exports.getProduct = asyncHandler(async (req, res, next) => {
@@ -38,11 +38,11 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update specific product by id
-//@route PUT /api/v1/categories/:id
+//@route PUT /api/v1/products/:id
 //@access private
 
 //@desc update product by product id
-//@desc /categories/:id
+//@desc /products/:id
 
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
