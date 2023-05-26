@@ -41,6 +41,9 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
 //@route PUT /api/v1/categories/:id
 //@access private
 
+//@desc update category by category id
+//@desc /categories/:id
+
 exports.updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -55,6 +58,9 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({ data: category });
 });
+
+
+//@desc delete specific category by id
 
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;

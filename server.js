@@ -5,6 +5,8 @@ const dbconnection = require('./config/database');
 const categoryRoute = require('./routes/categoryRoute');
 const ApiError = require('./utils/apiError');
 const globalError = require('./middleware/errorMiddleware');
+const subCategoryRoute = require('./routes/subCategoryRoute');
+
 dotenv.config({ path: 'config.env' });
 
 //express app
@@ -15,12 +17,14 @@ dbconnection();
 
 //Middleware
 app.use(express.json());
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   console.log(` Mode: ${process.env.NODE_ENV}`);
 }
 //routes
 app.use('/api/v1/categories', categoryRoute);
+app.use('/api/v1/subcategories', subCategoryRoute);
+
 app.all('*', (req, res, next) => {
   next(new ApiError(`Can not find this Route ${req.originalUrl}`, 400));
 });
@@ -28,7 +32,7 @@ app.all('*', (req, res, next) => {
 //err mw
 app.use(globalError);
 //listening
-const PORT = process.env.PORT;
+const {PORT} = process.env;
 const server = app.listen(PORT, () => {
   console.log(`app running on Port: ${PORT}`);
 });
