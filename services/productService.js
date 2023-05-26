@@ -1,15 +1,15 @@
 const slugify = require('slugify');
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
-const CategoryModel = require('../models/categoryModel');
+const ProductModel = require('../models/productModel');
 
-//@desc create new category
+//@desc create new product
 //@route /api/v1/categories
 //@access private
-exports.createCategory = asyncHandler(async (req, res) => {
+exports.createProduct = asyncHandler(async (req, res) => {
   const {name} = req.body;
-  const category = await CategoryModel.create({ name, slug: slugify(name) });
-  res.status(201).json({ Data: category });
+  const product = await ProductModel.create({ name, slug: slugify(name) });
+  res.status(201).json({ Data: product });
 });
 
 //@desc get all categories
@@ -19,55 +19,55 @@ exports.getCategories = asyncHandler(async (req, res) => {
   const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || 5;
   const skip = (page - 1) * limit;
-  const categories = await CategoryModel.find({}).skip(skip).limit(limit);
+  const categories = await ProductModel.find({}).skip(skip).limit(limit);
   res.status(200).json({ Results: categories.length, page, Data: categories });
 });
 
-//@desc get specific category by id
+//@desc get specific product by id
 //@route get /api/v1/categories/:id
 //@access public
 
-exports.getCategory = asyncHandler(async (req, res, next) => {
+exports.getProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const category = await CategoryModel.findById(id);
-  if (!category) {
-    // res.status(404).json({ msg: `No Category for this id ${id}` });
-    return next(new ApiError(`No Category for this id ${id}`, 404));
+  const product = await ProductModel.findById(id);
+  if (!product) {
+    // res.status(404).json({ msg: `No product for this id ${id}` });
+    return next(new ApiError(`No product for this id ${id}`, 404));
   }
-  res.status(200).json({ data: category });
+  res.status(200).json({ data: product });
 });
 
-//@desc update specific category by id
+//@desc update specific product by id
 //@route PUT /api/v1/categories/:id
 //@access private
 
-//@desc update category by category id
+//@desc update product by product id
 //@desc /categories/:id
 
-exports.updateCategory = asyncHandler(async (req, res, next) => {
+exports.updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
-  const category = await CategoryModel.findByIdAndUpdate(
+  const product = await ProductModel.findByIdAndUpdate(
     { _id: id },
     { name: name, slug: slugify(name) },
     { new: true }
   );
-  if (!category) {
-    // res.status(404).json({ msg: `No Category for this id ${id}` });
-    return next(new ApiError(`No Category for this id ${id}`, 404));
+  if (!product) {
+    // res.status(404).json({ msg: `No product for this id ${id}` });
+    return next(new ApiError(`No product for this id ${id}`, 404));
   }
-  res.status(200).json({ data: category });
+  res.status(200).json({ data: product });
 });
 
 
-//@desc delete specific category by id
+//@desc delete specific product by id
 
-exports.deleteCategory = asyncHandler(async (req, res, next) => {
+exports.deleteProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const category = await CategoryModel.findByIdAndDelete(id);
-  if (!category) {
-    // res.status(404).json({ msg: `No Category Found with this id ${id}` });
-    return next(new ApiError(`No Category for this id ${id}`, 404));
+  const product = await ProductModel.findByIdAndDelete(id);
+  if (!product) {
+    // res.status(404).json({ msg: `No product Found with this id ${id}` });
+    return next(new ApiError(`No product for this id ${id}`, 404));
   }
   res.status(204).send();
 });
