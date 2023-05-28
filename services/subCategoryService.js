@@ -1,10 +1,8 @@
-const slugify = require('slugify');
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const SubCategoryModel = require('../models/subCategoryModel');
 const ApiFeatures = require('../utils/apiFeatures');
 const handlerFactory = require('./handlersFactory');
-const subCategoryModel = require('../models/subCategoryModel');
 
 //setting categoryId from params in case it didn't exist in body
 exports.setCategoryIdToBody = (req, res, next) => {
@@ -15,15 +13,7 @@ exports.setCategoryIdToBody = (req, res, next) => {
 //@desc create new subcategory
 //@route POST /api/v1/subcategories
 //@access private
-exports.createSubCategory = asyncHandler(async (req, res, next) => {
-  const { name, category } = req.body;
-  const subcategory = await SubCategoryModel.create({
-    name: name,
-    category: category,
-    slug: slugify(name),
-  });
-  res.status(201).json({ data: subcategory });
-});
+exports.createSubCategory = handlerFactory.createOne(SubCategoryModel);
 
 //@desc get specific category by id
 //@route get /api/v1/categories/:id
@@ -72,7 +62,7 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
 //@desc update specific subcategory by id
 //@route PUT /api/v1/categories/:id
 //@access private
-exports.updateSubCategory = handlerFactory.updateOne(SubCategoryModel)
+exports.updateSubCategory = handlerFactory.updateOne(SubCategoryModel);
 
 //@desc delete specific subcategory by id
 //@route DELETE /api/v1/subcategories/:id
