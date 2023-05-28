@@ -1,5 +1,5 @@
 const { check } = require('express-validator');
-const validatorMiddleware = require('../../middleware/validatorMiddleware');
+const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 
 exports.getBrandValidator = [
   check('id').isMongoId().withMessage('Invalid Brand ID '),

@@ -1,7 +1,7 @@
 const slugify = require('slugify');
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
-const SubCategoryModel = require('../models/subCategory');
+const SubCategoryModel = require('../models/subCategoryModel');
 
 exports.setCategoryIdToBody = (req, res, next) => {
   if (!req.body.category) req.body.category = req.params.categoryId;
@@ -32,14 +32,14 @@ exports.getSubCategory = asyncHandler(async (req, res, next) => {
   res.status(200).json({ data: subcategory });
 });
 
-exports.createFilterObj = (req ,res , next)=> {
-  let filteredObj = {};
+exports.createFilterObj = (req, res, next) => {
+  let filterObj = {};
   if (req.params.categoryId) {
-    filteredObj = { category: req.params.categoryId };
-    req.filterObj = filteredObj;
+    filterObj = { category: req.params.categoryId };
+    req.filterObj = filterObj;
   }
-}
-
+  next();
+};
 
 exports.getSubCategories = asyncHandler(async (req, res) => {
   const page = req.query.page * 1 || 1;
@@ -49,9 +49,6 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
   const subcategories = await SubCategoryModel.find(req.filterObj)
     .skip(skip)
     .limit(limit);
-  // .populate({ path: 'category', select: 'name -_id' });
-
-  console.log(req.params);
 
   if (!subcategories) {
     return ApiError(404, 'No Subcategories Exist in DB');
