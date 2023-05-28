@@ -134,6 +134,13 @@ exports.getProductValidator = [
 
 exports.updateProductValidator = [
   check('id').isMongoId().withMessage('Invalid ID format'),
+  body('title')
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
+  validatorMiddleware,
 ];
 
 exports.deleteProductValidator = [

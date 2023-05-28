@@ -14,11 +14,15 @@ exports.deleteOne = (Model) =>
 
 exports.updateOne = (Model) =>
   asyncHandler(async (req, res, next) => {
-    const subcategory = await Model.findOneAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!subcategory) {
-      return next(ApiError(404, 'Subcategory not found'));
+    const document = await Model.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (!document) {
+      return next(new ApiError(404, 'Subcategory not found'));
     }
-    res.status(200).json({ data: subcategory });
+    res.status(200).json({ data: document });
   });
