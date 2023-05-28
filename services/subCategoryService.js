@@ -2,12 +2,17 @@ const slugify = require('slugify');
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const SubCategoryModel = require('../models/subCategoryModel');
+const ApiFeatures = require('../utils/apiFeatures');
 
+//setting categoryId from params in case it didn't exist in body
 exports.setCategoryIdToBody = (req, res, next) => {
   if (!req.body.category) req.body.category = req.params.categoryId;
   next();
 };
 
+//@desc create new subcategory
+//@route POST /api/v1/subcategories
+//@access private
 exports.createSubCategory = asyncHandler(async (req, res, next) => {
   const { name, category } = req.body;
   const subcategory = await SubCategoryModel.create({
@@ -18,20 +23,19 @@ exports.createSubCategory = asyncHandler(async (req, res, next) => {
   res.status(201).json({ data: subcategory });
 });
 
+//@desc get specific category by id
+//@route get /api/v1/categories/:id
+//@access public
 exports.getSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const subcategory = await SubCategoryModel.findById(id);
-  //   .populate({
-  //     path: 'category',
-  //     select: 'name -_id',
-  //   });
-
   if (!subcategory) {
     return ApiError(404, 'Subcategory not found');
   }
   res.status(200).json({ data: subcategory });
 });
 
+//filtering
 exports.createFilterObj = (req, res, next) => {
   let filterObj = {};
   if (req.params.categoryId) {
@@ -40,24 +44,34 @@ exports.createFilterObj = (req, res, next) => {
   }
   next();
 };
-
+//@desc get all subcategories
+//@route POST /api/v1/subcategories
+//@access public
 exports.getSubCategories = asyncHandler(async (req, res) => {
-  const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 5;
-  const skip = (page - 1) * limit;
+  //prepare query
+  const documentCount = await SubCategoryModel.countDocuments();
+  const apiFeatures = new ApiFeatures(SubCategoryModel.find(), req.query)
+    .sort()
+    .filter()
+    .search()
+    .limitFields()
+    .paginate(documentCount);
 
-  const subcategories = await SubCategoryModel.find(req.filterObj)
-    .skip(skip)
-    .limit(limit);
-
-  if (!subcategories) {
-    return ApiError(404, 'No Subcategories Exist in DB');
-  }
+  //execute the query
+  const { mongooseQuery, paginationResult } = apiFeatures;
+  const subcategories = await mongooseQuery;
   res
     .status(200)
-    .json({ Results: subcategories.length, page, Data: subcategories });
+    .json({
+      Results: subcategories.length,
+      paginationResult,
+      Data: subcategories,
+    });
 });
 
+//@desc update specific subcategory by id
+//@route PUT /api/v1/categories/:id
+//@access private
 exports.updateSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name, category } = req.body;
@@ -76,6 +90,9 @@ exports.updateSubCategory = asyncHandler(async (req, res, next) => {
   res.status(200).json({ data: subcategory });
 });
 
+//@desc delete specific subcategory by id
+//@route DELETE /api/v1/subcategories/:id
+//@access private
 exports.deleteSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const subcategory = await SubCategoryModel.findByIdAndDelete(id);
