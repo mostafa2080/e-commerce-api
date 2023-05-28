@@ -16,13 +16,25 @@ exports.createProduct = asyncHandler(async (req, res) => {
 //@route POST /api/v1/products
 //@access public
 exports.getProducts = asyncHandler(async (req, res) => {
+  //filtering the query parameters
+  const queryStringObject = { ...req.query };
+  const excludedFields = ['page', 'limit', 'sort', 'fields'];
+  excludedFields.forEach((el) => delete queryStringObject[el]);
+  //filter result using [gte, lte , gt, lt]
+  const queryString = JSON.stringify(queryStringObject).replace(
+    /\b(gte|lte|gt|lt)\b/g,
+    (match) => `$${match}`
+  );
+  //pagination
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 5;
+  const limit = req.query.limit * 1 || 50;
   const skip = (page - 1) * limit;
-  const products = await ProductModel.find({})
+  //query
+  const mongooseQuery = ProductModel.find(JSON.parse(queryString))
     .skip(skip)
     .limit(limit)
     .populate({ path: 'category', select: 'name -_id' });
+  const products = await mongooseQuery;
   res.status(200).json({ Results: products.length, page, Data: products });
 });
 
@@ -49,7 +61,7 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  if(req.body.title){
+  if (req.body.title) {
     req.body.slug = slugify(req.body.title);
   }
   const product = await ProductModel.findByIdAndUpdate({ _id: id }, req.body, {
