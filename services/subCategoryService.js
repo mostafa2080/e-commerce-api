@@ -4,6 +4,7 @@ const ApiError = require('../utils/apiError');
 const SubCategoryModel = require('../models/subCategoryModel');
 const ApiFeatures = require('../utils/apiFeatures');
 const handlerFactory = require('./handlersFactory');
+const subCategoryModel = require('../models/subCategoryModel');
 
 //setting categoryId from params in case it didn't exist in body
 exports.setCategoryIdToBody = (req, res, next) => {
@@ -72,19 +73,15 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
 //@route PUT /api/v1/categories/:id
 //@access private
 exports.updateSubCategory = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const { name, category } = req.body;
-  const subcategory = await SubCategoryModel.findOneAndUpdate(
-    { _id: id },
+  const subcategory = await subCategoryModel.findByIdAndUpdate(
+    req.params.id,
+    req.body,
     {
-      name,
-      category,
-      slug: slugify(name),
-    },
-    { new: true }
+      new: true,
+    }
   );
   if (!subcategory) {
-    return next(ApiError(404, 'Subcategory not found'));
+    return next(new ApiError(404, 'Subcategory not found'));
   }
   res.status(200).json({ data: subcategory });
 });

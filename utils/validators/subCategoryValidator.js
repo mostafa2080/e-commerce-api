@@ -1,4 +1,6 @@
-const { check } = require('express-validator');
+const { check, body } = require('express-validator');
+const slugify = require('slugify');
+
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 
 exports.getSubCategoryValidator = [
@@ -27,6 +29,10 @@ exports.updateSubCategoryValidator = [
     .notEmpty()
     .withMessage('Category name is required')
     .isLength({ min: 2, max: 32 }),
+  body('name').custom((val, { req }) => {
+    req.body.slug = slugify(val);
+    return true;
+  }),
   validatorMiddleware,
 ];
 
