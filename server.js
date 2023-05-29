@@ -1,6 +1,10 @@
+const path = require('path');
+
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+
+dotenv.config({ path: 'config.env' });
 const dbconnection = require('./config/database');
 const categoryRoute = require('./routes/categoryRoute');
 const ApiError = require('./utils/apiError');
@@ -9,7 +13,6 @@ const subCategoryRoute = require('./routes/subCategoryRoute');
 const brandRoute = require('./routes/brandRoute');
 const productRoute = require('./routes/productRoute');
 
-dotenv.config({ path: 'config.env' });
 
 //express app
 const app = express();
@@ -19,6 +22,7 @@ dbconnection();
 
 //Middleware
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'uploads')));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   console.log(` Mode: ${process.env.NODE_ENV}`);
@@ -36,7 +40,7 @@ app.all('*', (req, res, next) => {
 //err mw
 app.use(globalError);
 //listening
-const {PORT} = process.env;
+const { PORT } = process.env;
 const server = app.listen(PORT, () => {
   console.log(`app running on Port: ${PORT}`);
 });
