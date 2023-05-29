@@ -18,7 +18,7 @@ exports.updateOne = (Model) =>
       new: true,
     });
     if (!document) {
-      return next(new ApiError(404, 'Subcategory not found'));
+      return next(new ApiError('Document not found', 404));
     }
     res.status(200).json({ data: document });
   });

@@ -18,6 +18,13 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+categorySchema  .post('init', (doc) => {
+  if (doc.image) {
+    const imageUrl = `${process.env.BASE_URL}/categories/${doc.image}`;
+    doc.image = imageUrl;
+  }
+});
+
 //model
 const CategoryModel = mongoose.model('Category', categorySchema);
 

@@ -3,10 +3,12 @@ const express = require('express');
 const router = express.Router();
 const {
   createBrand,
-  getCategories,
+  getBrands,
   getBrand,
   updateBrand,
   deleteBrand,
+  uploadBrandImage,
+  processingImage,
 } = require('../services/brandService');
 
 const {
@@ -18,16 +20,12 @@ const {
 
 router
   .route('/')
-  .post(createBrandValidator, createBrand)
-  .get(getCategories);
+  .post(uploadBrandImage, processingImage, createBrandValidator, createBrand)
+  .get(getBrands);
 router
   .route('/:id')
   .get(getBrandValidator, getBrand)
-  .put(updateBrandValidator, updateBrand)
+  .put(uploadBrandImage, processingImage, updateBrandValidator, updateBrand)
   .delete(deleteBrandValidator, deleteBrand);
-
-// const subBrandRoute = require('./subBrandRoute');
-
-// router.use('/:BrandId/subcategories', subBrandRoute);
 
 module.exports = router;
