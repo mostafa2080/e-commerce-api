@@ -7,6 +7,7 @@ const {
   getCategory,
   updateCategory,
   deleteCategory,
+  uploadCategoryImage,
 } = require('../services/categoryService');
 
 const {
@@ -18,7 +19,7 @@ const {
 
 router
   .route('/')
-  .post(createCategoryValidator, createCategory)
+  .post(uploadCategoryImage, createCategoryValidator, createCategory)
   .get(getCategories);
 router
   .route('/:id')

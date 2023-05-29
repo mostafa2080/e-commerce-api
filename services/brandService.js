@@ -1,7 +1,4 @@
-const asyncHandler = require('express-async-handler');
-const ApiError = require('../utils/apiError');
 const BrandModel = require('../models/brandModel');
-const ApiFeatures = require('../utils/apiFeatures');
 const handlerFactory = require('./handlersFactory');
 
 //@desc create new brand
@@ -12,35 +9,11 @@ exports.createBrand = handlerFactory.createOne(BrandModel);
 //@desc get all brands
 //@route GET /api/v1/brands
 //@access public
-exports.getCategories = asyncHandler(async (req, res) => {
-  //prepare query
-  const documentCount = await BrandModel.countDocuments();
-  const apiFeatures = new ApiFeatures(BrandModel.find(), req.query)
-    .sort()
-    .filter()
-    .search()
-    .limitFields()
-    .paginate(documentCount);
-
-  //execute the query
-  const { mongooseQuery, paginationResult } = apiFeatures;
-  const brands = await mongooseQuery;
-  res
-    .status(200)
-    .json({ Results: brands.length, paginationResult, Data: brands });
-});
-
+exports.getCategories = handlerFactory.getAll(BrandModel);
 //@desc get specific Brand by id
 //@route GET /api/v1/brands/:id
 //@access public
-exports.getBrand = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const brand = await BrandModel.findById(id);
-  if (!brand) {
-    return next(new ApiError(`No brand for this id ${id}`, 404));
-  }
-  res.status(200).json({ data: brand });
-});
+exports.getBrand = handlerFactory.getOne(BrandModel);
 
 //@desc update specific brand by id
 //@route PUT /api/v1/brands/:id

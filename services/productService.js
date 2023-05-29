@@ -1,8 +1,4 @@
-const slugify = require('slugify');
-const asyncHandler = require('express-async-handler');
-const ApiError = require('../utils/apiError');
 const ProductModel = require('../models/productModel');
-const ApiFeatures = require('../utils/apiFeatures');
 const handlerFactory = require('./handlersFactory');
 
 //@desc create new product
@@ -13,38 +9,12 @@ exports.createProduct = handlerFactory.createOne(ProductModel);
 //@desc get all products
 //@route POST /api/v1/products
 //@access public
-exports.getProducts = asyncHandler(async (req, res) => {
-  //prepare query
-  const documentCount = await ProductModel.countDocuments();
-  const apiFeatures = new ApiFeatures(ProductModel.find(), req.query)
-    .sort()
-    .filter()
-    .search('Products')
-    .limitFields()
-    .paginate(documentCount);
-
-  //execute the query
-  const { mongooseQuery, paginationResult } = apiFeatures;
-  const products = await mongooseQuery;
-  res
-    .status(200)
-    .json({ Results: products.length, paginationResult, Data: products });
-});
+exports.getProducts = handlerFactory.getAll(ProductModel, 'Products');
 
 //@desc get specific product by id
 //@route get /api/v1/products/:id
 //@access public
-exports.getProduct = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const product = await ProductModel.findById(id).populate({
-    path: 'category',
-    select: 'name -_id',
-  });
-  if (!product) {
-    return next(new ApiError(`No product for this id ${id}`, 404));
-  }
-  res.status(200).json({ data: product });
-});
+exports.getProduct = handlerFactory.getOne(ProductModel);
 
 //@desc update specific product by id
 //@route PUT /api/v1/products/:id

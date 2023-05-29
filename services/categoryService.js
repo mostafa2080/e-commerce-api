@@ -1,10 +1,24 @@
-const slugify = require('slugify');
-const asyncHandler = require('express-async-handler');
-const ApiError = require('../utils/apiError');
+const multer = require('multer');
 const CategoryModel = require('../models/categoryModel');
-const ApiFeatures = require('../utils/apiFeatures');
 const handlerFactory = require('./handlersFactory');
 
+const { v4: uuidv4 } = require('uuid');
+
+//diskStorage
+const multerStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/categories');
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split('/')[1];
+    const filename = `category-${uuidv4()}-${Date.now()}.${ext}`;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: multerStorage });
+
+exports.uploadCategoryImage = upload.single('image');
 //@desc create new category
 //@route POST /api/v1/categories
 //@access private
@@ -13,36 +27,12 @@ exports.createCategory = handlerFactory.createOne(CategoryModel);
 //@desc get all categories
 //@route POST /api/v1/categories
 //@access public
-exports.getCategories = asyncHandler(async (req, res) => {
-  //prepare query
-  const documentCount = await CategoryModel.countDocuments();
-  const apiFeatures = new ApiFeatures(CategoryModel.find(), req.query)
-    .sort()
-    .filter()
-    .search()
-    .limitFields()
-    .paginate(documentCount);
-
-  //execute the query
-  const { mongooseQuery, paginationResult } = apiFeatures;
-  const categories = await mongooseQuery;
-  res
-    .status(200)
-    .json({ Results: categories.length, paginationResult, Data: categories });
-});
+exports.getCategories = handlerFactory.getAll(CategoryModel);
 
 //@desc get specific category by id
 //@route get /api/v1/categories/:id
 //@access public
-exports.getCategory = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const category = await CategoryModel.findById(id);
-  if (!category) {
-    return next(new ApiError(`No Category for this id ${id}`, 404));
-  }
-  res.status(200).json({ data: category });
-});
-
+exports.getCategory = handlerFactory.getOne(CategoryModel);
 //@desc update specific category by id
 //@route PUT /api/v1/categories/:id
 //@access private
