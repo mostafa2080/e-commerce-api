@@ -7,7 +7,7 @@ const {
   getProduct,
   updateProduct,
   deleteProduct,
-  uploadImage,
+  uploadProductImages,
   processingImage,
 } = require('../services/productService');
 
@@ -20,12 +20,12 @@ const {
 
 router
   .route('/')
-  .post(uploadImage, processingImage, createProductValidator, createProduct)
+  .post(uploadProductImages, processingImage, createProductValidator, createProduct)
   .get(getProducts);
 router
   .route('/:id')
   .get(getProductValidator, getProduct)
-  .put(uploadImage, processingImage, updateProductValidator, updateProduct)
+  .put(uploadProductImages, processingImage, updateProductValidator, updateProduct)
   .delete(deleteProductValidator, deleteProduct);
 
 module.exports = router;

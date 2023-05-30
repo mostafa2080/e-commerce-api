@@ -1,7 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
-const sharp = require('sharp');
 const multer = require('multer');
-const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 
 //diskStorage
@@ -16,7 +13,7 @@ const ApiError = require('../utils/apiError');
 //   },
 // });
 
-exports.uploadSingleImage = (fieldName) => {
+const multerOptions = () => {
   const multerStorage = multer.memoryStorage();
 
   const multerFileFilter = (req, file, cb) => {
@@ -31,24 +28,9 @@ exports.uploadSingleImage = (fieldName) => {
     storage: multerStorage,
     fileFilter: multerFileFilter,
   });
-
-  return upload.single(fieldName);
+  return upload;
 };
+exports.uploadSingleImage = (fieldName) => multerOptions().single(fieldName);
 
-exports.uploadMixOfImages = (arrayOfFields) => {
-  const multerStorage = multer.memoryStorage();
-
-  const multerFileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image')) {
-      cb(null, true);
-    } else {
-      cb(new ApiError('File Must be An Image', 400), false);
-    }
-  };
-
-  const upload = multer({
-    storage: multerStorage,
-    fileFilter: multerFileFilter,
-  });
-  return upload.fields(arrayOfFields);
-};
+exports.uploadMixOfImages = (arrayOfFields) =>
+  multerOptions().fields(arrayOfFields);
