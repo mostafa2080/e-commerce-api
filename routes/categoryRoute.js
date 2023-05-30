@@ -30,7 +30,12 @@ router
 router
   .route('/:id')
   .get(getCategoryValidator, getCategory)
-  .put(uploadCategoryImage, processingImage, updateCategoryValidator)
+  .put(
+    uploadCategoryImage,
+    processingImage,
+    updateCategoryValidator,
+    updateCategory
+  )
   .delete(deleteCategoryValidator, deleteCategory);
 
 const subCategoryRoute = require('./subCategoryRoute');
