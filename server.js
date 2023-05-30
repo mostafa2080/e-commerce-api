@@ -12,6 +12,7 @@ const globalError = require('./middlewares/errorMiddleware');
 const subCategoryRoute = require('./routes/subCategoryRoute');
 const brandRoute = require('./routes/brandRoute');
 const productRoute = require('./routes/productRoute');
+const userRoute = require('./routes/userRoute');
 
 
 //express app
