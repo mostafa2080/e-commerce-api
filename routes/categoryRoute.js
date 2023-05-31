@@ -18,12 +18,13 @@ const {
   updateCategoryValidator,
 } = require('../utils/validators/categoryValidator');
 
-const { protect } = require('../services/authService');
+const { protect, allowedTo } = require('../services/authService');
 
 router
   .route('/')
   .post(
     protect,
+    allowedTo('admin', 'manager'),
     uploadCategoryImage,
     processingImage,
     createCategoryValidator,
