@@ -55,3 +55,11 @@ exports.loginValidator = [
     .withMessage('password must be at least 6 characters'),
   validatorMiddleware,
 ];
+
+exports.forgotPasswordValidator = [
+  check('email')
+    .notEmpty()
+    .isEmail()
+    .withMessage('Please enter a valid email address'),
+  validatorMiddleware,
+];
