@@ -43,15 +43,6 @@ exports.signupValidator = [
 ];
 
 exports.loginValidator = [
-  check('name')
-    .notEmpty()
-    .isLength({ min: 3 })
-    .withMessage('Too Short User Name')
-
-    .custom((val, { req }) => {
-      req.body.slug = slugify(val);
-      return true;
-    }),
   check('email')
     .notEmpty()
     .isEmail()
