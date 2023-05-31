@@ -9,6 +9,7 @@ const {
   deleteUser,
   uploadUserImage,
   processingImage,
+  ChangeUserPassword,
 } = require('../services/userService');
 
 const {
@@ -17,6 +18,8 @@ const {
   deleteUserValidator,
   updateUserValidator,
 } = require('../utils/validators/userValidator');
+
+router.route('/changePassword/:id').put(ChangeUserPassword);
 
 router
   .route('/')
