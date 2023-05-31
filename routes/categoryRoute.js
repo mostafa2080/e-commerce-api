@@ -18,9 +18,12 @@ const {
   updateCategoryValidator,
 } = require('../utils/validators/categoryValidator');
 
+const { protect } = require('../services/authService');
+
 router
   .route('/')
   .post(
+    protect,
     uploadCategoryImage,
     processingImage,
     createCategoryValidator,
