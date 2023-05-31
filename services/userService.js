@@ -17,7 +17,7 @@ exports.processingImage = asyncHandler(async (req, res, next) => {
       .toFormat('jpeg')
       .jpeg({ quality: 90 })
       .toFile(`./uploads/users/${filename}`);
-    req.body.image = filename;
+    req.body.profileImage = filename;
   }
 
   next();
