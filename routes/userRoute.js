@@ -17,9 +17,12 @@ const {
   createUserValidator,
   deleteUserValidator,
   updateUserValidator,
+  changeUserPasswordValidator,
 } = require('../utils/validators/userValidator');
 
-router.route('/changePassword/:id').put(ChangeUserPassword);
+router
+  .route('/changePassword/:id')
+  .put(changeUserPasswordValidator, ChangeUserPassword);
 
 router
   .route('/')
