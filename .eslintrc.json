@@ -17,6 +17,6 @@
     "prefer-destructuring": ["warn", { "object": true, "array": false }],
     "node/no-unsupported-features/es-syntax": "off",
     "no-unused-vars": ["warn", { "argsIgnorePattern": "req|res|next|val" }],
-    "import/no-extraneous-dependencies": "warn"
+    "import/no-extraneous-dependencies": "off"
   }
 }
