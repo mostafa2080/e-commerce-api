@@ -18,14 +18,30 @@ const {
   deleteProductValidator,
 } = require('../utils/validators/ProductValidator');
 
+const { protect, allowedTo } = require('../services/authService');
+
 router
   .route('/')
-  .post(uploadProductImages, processingImage, createProductValidator, createProduct)
+  .post(
+    protect,
+    allowedTo('admin', 'manager'),
+    uploadProductImages,
+    processingImage,
+    createProductValidator,
+    createProduct
+  )
   .get(getProducts);
 router
   .route('/:id')
   .get(getProductValidator, getProduct)
-  .put(uploadProductImages, processingImage, updateProductValidator, updateProduct)
-  .delete(deleteProductValidator, deleteProduct);
+  .put(
+    protect,
+    allowedTo('admin', 'manager'),
+    uploadProductImages,
+    processingImage,
+    updateProductValidator,
+    updateProduct
+  )
+  .delete(protect, allowedTo('admin'), deleteProductValidator, deleteProduct);
 
 module.exports = router;
