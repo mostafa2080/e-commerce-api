@@ -11,21 +11,21 @@ const {
   processingImage,
 } = require('../services/userService');
 
-// const {
-//   getBrandValidator,
-//   createBrandValidator,
-//   deleteBrandValidator,
-//   updateBrandValidator,
-// } = require('../utils/validators/brandValidator');
+const {
+  getUserValidator,
+  createUserValidator,
+  deleteUserValidator,
+  updateUserValidator,
+} = require('../utils/validators/userValidator');
 
 router
   .route('/')
-  .post(uploadUserImage, processingImage, createUser)
+  .post(uploadUserImage, processingImage, createUserValidator, createUser)
   .get(getUsers);
 router
   .route('/:id')
-  .get(getUser)
-  .put(uploadUserImage, processingImage, updateUser)
-  .delete(deleteUser);
+  .get(getUserValidator, getUser)
+  .put(uploadUserImage, processingImage, updateUserValidator, updateUser)
+  .delete(deleteUserValidator, deleteUser);
 
 module.exports = router;

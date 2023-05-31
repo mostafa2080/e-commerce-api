@@ -6,17 +6,19 @@ const UserModel = require('../models/userModel');
 const handlerFactory = require('./handlersFactory');
 const { uploadSingleImage } = require('../middlewares/uploadImageMiddleware');
 
-exports.uploadUserImage = uploadSingleImage('profileImg');
+exports.uploadUserImage = uploadSingleImage('profileImage');
 
 //image processing
 exports.processingImage = asyncHandler(async (req, res, next) => {
   const filename = `user-${uuidv4()}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(300, 300)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`./uploads/users/${filename}`);
-  req.body.image = filename;
+  if (req.file) {
+    await sharp(req.file.buffer)
+      .resize(300, 300)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`./uploads/users/${filename}`);
+    req.body.image = filename;
+  }
 
   next();
 });

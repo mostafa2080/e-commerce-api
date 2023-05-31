@@ -14,7 +14,6 @@ const brandRoute = require('./routes/brandRoute');
 const productRoute = require('./routes/productRoute');
 const userRoute = require('./routes/userRoute');
 
-
 //express app
 const app = express();
 
@@ -29,6 +28,7 @@ if (process.env.NODE_ENV === 'development') {
   console.log(` Mode: ${process.env.NODE_ENV}`);
 }
 //routes
+app.use('/api/v1/users', userRoute);
 app.use('/api/v1/categories', categoryRoute);
 app.use('/api/v1/subcategories', subCategoryRoute);
 app.use('/api/v1/brands', brandRoute);
