@@ -35,12 +35,14 @@ router
   .route('/:id')
   .get(getCategoryValidator, getCategory)
   .put(
+    protect,
+    allowedTo('admin', 'manager'),
     uploadCategoryImage,
     processingImage,
     updateCategoryValidator,
     updateCategory
   )
-  .delete(deleteCategoryValidator, deleteCategory);
+  .delete(protect, allowedTo('admin'), deleteCategoryValidator, deleteCategory);
 
 const subCategoryRoute = require('./subCategoryRoute');
 
