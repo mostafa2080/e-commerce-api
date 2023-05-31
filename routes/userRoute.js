@@ -20,18 +20,34 @@ const {
   changeUserPasswordValidator,
 } = require('../utils/validators/userValidator');
 
+const { protect, allowedTo } = require('../services/authService');
+
 router
   .route('/changePassword/:id')
   .put(changeUserPasswordValidator, ChangeUserPassword);
 
 router
   .route('/')
-  .post(uploadUserImage, processingImage, createUserValidator, createUser)
-  .get(getUsers);
+  .post(
+    protect,
+    allowedTo('admin'),
+    uploadUserImage,
+    processingImage,
+    createUserValidator,
+    createUser
+  )
+  .get(protect, allowedTo('admin', 'manager'), getUsers);
 router
   .route('/:id')
-  .get(getUserValidator, getUser)
-  .put(uploadUserImage, processingImage, updateUserValidator, updateUser)
-  .delete(deleteUserValidator, deleteUser);
+  .get(protect, allowedTo('admin', 'manager'), getUserValidator, getUser)
+  .put(
+    protect,
+    allowedTo('admin'),
+    uploadUserImage,
+    processingImage,
+    updateUserValidator,
+    updateUser
+  )
+  .delete(protect, allowedTo('admin'), deleteUserValidator, deleteUser);
 
 module.exports = router;
