@@ -43,7 +43,8 @@ exports.login = asyncHandler(async (req, res, next) => {
   res.status(200).json({ data: user, token });
 });
 
-exports.protect = asyncHandler((req, res, next) => {
+//@desc Authenticated user to make sure that user is logged in
+exports.protect = asyncHandler(async (req, res, next) => {
   //1-check if token exists
   let token;
   if (
@@ -61,9 +62,32 @@ exports.protect = asyncHandler((req, res, next) => {
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  //3-check if user exists
+  // 3-check if user exists
+  const Currentuser = await UserModel.findById(decoded.payload);
+  // console.log(decoded);
+  if (!Currentuser) {
+    return next(
+      new ApiError('User That Belong to this token is no longer exist', 401)
+    );
+  }
 
   //4-check if user password changed after token created
+  if (Currentuser.passwordChangedAt) {
+    const passChangedAtTimestamp = parseInt(
+      Currentuser.passwordChangedAt / 1000,
+      10
+    );
+    // if user password changed after token created
+    if (passChangedAtTimestamp > decoded.iat) {
+      return next(
+        new ApiError(
+          'Your password has been changed recently, please login again..',
+          401
+        )
+      );
+    }
+  }
 
-  //5-send response
+  req.user = Currentuser;
+  next();
 });

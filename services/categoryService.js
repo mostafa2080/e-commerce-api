@@ -12,6 +12,7 @@ exports.uploadCategoryImage = uploadSingleImage('image');
 //image processing
 exports.processingImage = asyncHandler(async (req, res, next) => {
   const filename = `category-${uuidv4()}-${Date.now()}.jpeg`;
+  // console.log(req.file);
   await sharp(req.file.buffer)
     .resize(300, 300)
     .toFormat('jpeg')
