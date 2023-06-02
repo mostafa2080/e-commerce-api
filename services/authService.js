@@ -5,11 +5,7 @@ const bcrypt = require('bcryptjs');
 const UserModel = require('../models/userModel');
 const ApiError = require('../utils/apiError');
 const sendMail = require('../utils/sendEMail');
-
-const createToken = (payload) =>
-  jwt.sign({ payload }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+const createToken = require('../utils/createToken');
 
 //@desc Signup
 //@route POST /api/v1/auth/signup
