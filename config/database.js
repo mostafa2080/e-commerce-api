@@ -12,3 +12,6 @@ const dbconnection = () => {
 };
 
 module.exports = dbconnection;
+
+
+//sending  mail to users using gmail service in nodejs ?

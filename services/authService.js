@@ -51,7 +51,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer ')
+    req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
@@ -191,6 +191,10 @@ exports.verifyPassResetCode = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: 'success' });
 });
 
+//@desc verify reset password
+//@route POST /api/v1/auth/resetPassword
+//@access public
+
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   //1) get user based on their email
   const user = await UserModel.findOne({ email: req.body.email });
@@ -213,5 +217,4 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   //3) if everything okay, generate a new token
   const token = createToken(user._id);
   res.status(200).json({ token });
-
 });
