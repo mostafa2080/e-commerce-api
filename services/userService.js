@@ -7,6 +7,7 @@ const ApiError = require('../utils/apiError');
 const UserModel = require('../models/userModel');
 const handlerFactory = require('./handlersFactory');
 const { uploadSingleImage } = require('../middlewares/uploadImageMiddleware');
+const createToken = require('../utils/createToken');
 
 exports.uploadUserImage = uploadSingleImage('profileImage');
 
@@ -83,3 +84,36 @@ exports.ChangeUserPassword = asyncHandler(async (req, res, next) => {
 //@route Delete /api/v1/users/:id
 //@access private
 exports.deleteUser = handlerFactory.deleteOne(UserModel);
+
+//@desc get  logged user data
+//@route GET /api/v1/users/getMe
+//@access protected
+
+exports.getLoggedUserData = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+});
+
+//@desc Update Logged User Password
+//@route PUT /api/v1/users/updateMyPassword
+//@access protected
+
+exports.updateLoggedUserPassword = asyncHandler(async (req, res, next) => {
+  //1) update user password based on the user payload (req.user._id)
+  const user = await UserModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      password: await bcrypt.hash(req.body.password, 12),
+      passwordChangedAt: Date.now(),
+    },
+    {
+      new: true,
+    }
+  );
+  //2)generate token
+  const token = createToken(user._id);
+  res.status(200).json({
+    data: user,
+    token,
+  });
+});

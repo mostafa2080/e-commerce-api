@@ -10,6 +10,8 @@ const {
   uploadUserImage,
   processingImage,
   ChangeUserPassword,
+  getLoggedUserData,
+  updateLoggedUserPassword,
 } = require('../services/userService');
 
 const {
@@ -22,20 +24,22 @@ const {
 
 const { protect, allowedTo } = require('../services/authService');
 
+router.get('/getMe', protect, getLoggedUserData, getUser);
+router.put('/changeMyPassaowrd', protect, updateLoggedUserPassword);
+
+//admin
+// router.use(protect, allowedTo('admin'));  this will be applied to all the below routes
 router
   .route('/changePassword/:id')
-  .put(changeUserPasswordValidator, ChangeUserPassword);
+  .put(
+    allowedTo('admin', 'manager'),
+    changeUserPasswordValidator,
+    ChangeUserPassword
+  );
 
 router
   .route('/')
-  .post(
-    protect,
-    allowedTo('admin'),
-    uploadUserImage,
-    processingImage,
-    createUserValidator,
-    createUser
-  )
+  .post(uploadUserImage, processingImage, createUserValidator, createUser)
   .get(protect, allowedTo('admin', 'manager'), getUsers);
 router
   .route('/:id')
