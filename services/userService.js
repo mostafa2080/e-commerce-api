@@ -117,3 +117,28 @@ exports.updateLoggedUserPassword = asyncHandler(async (req, res, next) => {
     token,
   });
 });
+
+//@desc Update Logged User Data (withoutPasssword , role )
+//@route PUT /api/v1/users/updateMe
+//@access protected
+exports.updateLoggedUserData = asyncHandler(async (req, res, next) => {
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    },
+    { new: true }
+  );
+  res.status(200).json({ data: updatedUser });
+});
+
+//@desc Delete Logged User Data
+//@route DELETE /api/v1/users/deleteMe
+//@access protected
+
+exports.deleteLoggedUserData = asyncHandler(async (req, res, next) => {
+  await UserModel.findOneAndUpdate(req.user._id, { active: false });
+  res.status(200).json({ status: 'Your Account Deleted Successfully' });
+});
