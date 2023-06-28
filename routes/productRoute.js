@@ -18,8 +18,10 @@ const {
   deleteProductValidator,
 } = require('../utils/validators/ProductValidator');
 
+const reviewsRoute = require('./reviewRoute');
 const { protect, allowedTo } = require('../services/authService');
-
+//nested Route
+router.use('/:productId/reviews', reviewsRoute);
 router
   .route('/')
   .post(
