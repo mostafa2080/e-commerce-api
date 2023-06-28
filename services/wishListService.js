@@ -21,3 +21,23 @@ exports.addProductToWishList = asyncHandler(async (req, res, next) => {
     data: User.wishList,
   });
 });
+
+exports.removeProductFromWishList = asyncHandler(async (req, res, next) => {
+  const User = await UserModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      $pull: { wishList: req.params.productId },
+    },
+    {
+      new: true,
+    }
+  );
+  if (!User) {
+    return next(new ApiError('Something went wrong', 401));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: 'product Removed successfully to your wishlist',
+    data: User.wishList,
+  });
+});

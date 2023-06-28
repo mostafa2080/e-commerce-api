@@ -1,7 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const { addProductToWishList } = require('../services/wishListService');
+const {
+  addProductToWishList,
+  removeProductFromWishList,
+} = require('../services/wishListService');
 
 // const {
 //   getBrandValidator,
@@ -13,5 +16,9 @@ const { addProductToWishList } = require('../services/wishListService');
 const { protect, allowedTo } = require('../services/authService');
 
 router.route('/').post(protect, allowedTo('user'), addProductToWishList);
+
+router
+  .route('/:productId')
+  .delete(protect, allowedTo('user'), removeProductFromWishList);
 
 module.exports = router;
