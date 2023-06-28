@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const ApiFeatures = require('../utils/apiFeatures');
+const Review = require('../models/reviewModel');
 
 exports.deleteOne = (Model) =>
   asyncHandler(async (req, res, next) => {
@@ -12,7 +13,10 @@ exports.deleteOne = (Model) =>
     }
 
     // Trigger "remove" event when update document
-    Model.calcAverageRatingsAndQuantity(document.product);
+    console.log(Model);
+    if (Model === Review) {
+      Model.calcAverageRatingsAndQuantity(document.product);
+    }
     res.status(204).send();
   });
 
