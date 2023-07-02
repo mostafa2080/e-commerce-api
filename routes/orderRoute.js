@@ -21,5 +21,11 @@ router.use(authService.protect);
 //   checkoutSession
 // );
 router.route('/:cartId').post(authService.allowedTo('user'), createCashOrder);
-
+router.get(
+  '/',
+  authService.allowedTo('user', 'admin', 'manager'),
+  filterOrderForLoggedUser,
+  findAllOrders
+);
+router.get('/:id', findSpecificOrder);
 module.exports = router;
