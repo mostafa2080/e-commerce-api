@@ -10,6 +10,7 @@ dotenv.config({ path: 'config.env' });
 const dbconnection = require('./config/database');
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
+const { webhookCheckout } = require('./services/orderService');
 
 const mountRoutes = require('./routes');
 //express app
@@ -17,6 +18,13 @@ const app = express();
 app.use(cors());
 app.options('*', cors());
 app.use(compression());
+
+// Checkout webhook
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout
+);
 
 //connect with DB
 dbconnection();
