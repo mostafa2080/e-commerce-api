@@ -15,11 +15,11 @@ const router = express.Router();
 
 router.use(authService.protect);
 
-// router.get(
-//   '/checkout-session/:cartId',
-//   authService.allowedTo('user'),
-//   checkoutSession
-// );
+router.get(
+  '/checkout-session/:cartId',
+  authService.allowedTo('user'),
+  checkoutSession
+);
 router.route('/:cartId').post(authService.allowedTo('user'), createCashOrder);
 router.get(
   '/',
@@ -28,4 +28,14 @@ router.get(
   findAllOrders
 );
 router.get('/:id', findSpecificOrder);
+router.put(
+  '/:id/pay',
+  authService.allowedTo('admin', 'manager'),
+  updateOrderToPaid
+);
+router.put(
+  '/:id/deliver',
+  authService.allowedTo('admin', 'manager'),
+  updateOrderToDelivered
+);
 module.exports = router;
