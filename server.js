@@ -6,8 +6,9 @@ const morgan = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
-const Tokens = require('csrf');
 const hpp = require('hpp');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 dotenv.config({ path: 'config.env' });
 const dbconnection = require('./config/database');
@@ -45,6 +46,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   console.log(` Mode: ${process.env.NODE_ENV}`);
 }
+
+//data sanitization
+app.use(mongoSanitize()); //sanitizing no sql query injection
+app.use(xss()); //for sanitizing scripts
+
 // Limit each IP to 100 requests per `window` (here, per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

@@ -6,7 +6,7 @@ const UserModel = require('../models/userModel');
 const ApiError = require('../utils/apiError');
 const sendMail = require('../utils/sendEMail');
 const createToken = require('../utils/createToken');
-
+const { sanitizeUser } = require('../utils/userSanitizer');
 //@desc Signup
 //@route POST /api/v1/auth/signup
 //@access public
@@ -20,7 +20,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
   //2- create token
   const token = createToken(user._id);
   //3-send response
-  res.status(201).json({ data: user, token });
+  res.status(201).json({ data: sanitizeUser(user), token });
 });
 
 //@desc Login
