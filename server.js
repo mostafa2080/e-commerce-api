@@ -5,6 +5,9 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+const Tokens = require('csrf');
+const hpp = require('hpp');
 
 dotenv.config({ path: 'config.env' });
 const dbconnection = require('./config/database');
@@ -31,11 +34,28 @@ dbconnection();
 
 //Middleware
 app.use(express.json({ limit: '20kb' }));
+//hpp http parameter pollution
+app.use(
+  hpp({
+    whitelist: ['price', 'sold', 'quantity', 'ratingAverage', 'ratingQuantity'],
+  })
+);
 app.use(express.static(path.join(__dirname, 'uploads')));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   console.log(` Mode: ${process.env.NODE_ENV}`);
 }
+// Limit each IP to 100 requests per `window` (here, per 15 minutes)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,
+  message:
+    'Too many accounts created from this IP, please try again after an hour',
+});
+
+app.use('/api', limiter);
+//csrf
+
 //routes
 mountRoutes(app);
 
