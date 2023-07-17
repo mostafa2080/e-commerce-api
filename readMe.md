@@ -76,16 +76,6 @@ This is the documentation for the E-Commerce API, which provides endpoints for m
 - `PUT /api/coupons/:id`: Update a specific coupon by ID.
 - `DELETE /api/coupons/:id`: Delete a specific coupon by ID.
 
-## Error Handling
-
-The API returns standardized error responses in the following format:
-
-```json
-{
-  "status": "error",
-  "message": "Error message"
-}
-
 ## Security
 
 The API implements the following security measures:
@@ -106,4 +96,15 @@ The API utilizes a mail service to send password reset tokens and welcome emails
 - Password: `<your-email-password>`
 
 Make sure to replace `<your-email-host>`, `<your-email-port>`, `<your-email-username>`, and `<your-email-password>` with your actual email service settings.
+
+## Error Handling
+
+The API returns standardized error responses in the following format:
+
+```json
+{
+  "status": "error",
+  "message": "Error message"
+}
+
 
