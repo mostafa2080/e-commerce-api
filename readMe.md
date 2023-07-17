@@ -1,8 +1,10 @@
 ```md
 # E-Commerce API Documentation
 
-This is the documentation for the E-Commerce API, which provides endpoints for managing products, categories, users, orders, and more.
+This is the official documentation for the E-Commerce API. It provides comprehensive information about the API endpoints and their functionalities, along with installation and setup instructions.
 
+## Installation
+To get started with the E-Commerce API, follow these steps:
 
 # Clone the repository
 git clone https://github.com/mostafa2080/e-commerce-api
