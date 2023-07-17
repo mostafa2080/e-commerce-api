@@ -3,6 +3,38 @@
 
 This is the documentation for the E-Commerce API, which provides endpoints for managing products, categories, users, orders, and more.
 
+
+# Clone the repository
+git clone https://github.com/mostafa2080/e-commerce-api
+cd e-commerce-api
+
+# Install dependencies
+npm install
+
+# Create the .env file and configure environment variables
+echo "PORT=3000" >> .env
+echo "MONGODB_URI=<your-mongodb-uri>" >> .env
+echo "JWT_SECRET=<your-jwt-secret>" >> .env
+echo "EMAIL_HOST=<your-email-host>" >> .env
+echo "EMAIL_PORT=<your-email-port>" >> .env
+echo "EMAIL_USERNAME=<your-email-username>" >> .env
+echo "EMAIL_PASSWORD=<your-email-password>" >> .env
+
+# Replace the placeholders in .env with actual values
+sed -i 's/<your-mongodb-uri>/your-mongodb-uri/g' .env
+sed -i 's/<your-jwt-secret>/your-jwt-secret/g' .env
+sed -i 's/<your-email-host>/your-email-host/g' .env
+sed -i 's/<your-email-port>/your-email-port/g' .env
+sed -i 's/<your-email-username>/your-email-username/g' .env
+sed -i 's/<your-email-password>/your-email-password/g' .env
+
+# Start the API server in development mode
+npm run start:dev
+
+# Start the API server in prodction mode
+npm run start:prod
+
+
 ## API Endpoints
 
 ### Auth Routes
