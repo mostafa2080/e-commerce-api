@@ -86,6 +86,7 @@ The API returns standardized error responses in the following format:
   "message": "Error message"
 }
 
+```md
 ## Security
 
 The API implements the following security measures:
@@ -107,3 +108,4 @@ The API utilizes a mail service to send password reset tokens and welcome emails
 
 Make sure to replace `<your-email-host>`, `<your-email-port>`, `<your-email-username>`, and `<your-email-password>` with your actual email service settings.
 
+```md
