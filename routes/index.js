@@ -10,6 +10,7 @@ const couponRoute = require('./couponRoute');
 const categoryRoute = require('./categoryRoute');
 const cartRoute = require('./cartRoute');
 const orderRoute = require('./orderRoute');
+const swagger = require('../utils/swagger');
 
 const mountRoutes = (app) => {
   app.use('/api/v1/users', userRoute);
@@ -24,6 +25,7 @@ const mountRoutes = (app) => {
   app.use('/api/v1/coupon', couponRoute);
   app.use('/api/v1/cart', cartRoute);
   app.use('/api/v1/orders', orderRoute);
+  swagger(app, process.env.PORT);
 };
 
 module.exports = mountRoutes;

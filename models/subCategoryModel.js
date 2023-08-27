@@ -1,5 +1,29 @@
 const mongoose = require('mongoose');
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     SubCategory:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Name of the subcategory.
+ *         slug:
+ *           type: string
+ *           description: Slug version of the subcategory name (lowercase).
+ *         category:
+ *           type: string
+ *           description: Category ID to which the subcategory belongs.
+ *       required:
+ *         - name
+ *         - category
+ *       example:
+ *         name: "Electronics"
+ *         category: "category123"
+ */
+
 const subCategorySchema = new mongoose.Schema(
   {
     name: {

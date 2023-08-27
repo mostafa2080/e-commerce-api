@@ -1,5 +1,28 @@
 const mongoose = require('mongoose');
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Coupon:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the coupon.
+ *         expire:
+ *           type: string
+ *           format: date-time
+ *           description: The expiration date and time of the coupon.
+ *         discount:
+ *           type: number
+ *           description: The discount value associated with the coupon.
+ *       required:
+ *         - name
+ *         - expire
+ *         - discount
+ */
+
 const couponSchema = new mongoose.Schema(
   {
     name: {

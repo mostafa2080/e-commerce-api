@@ -1,4 +1,21 @@
 const mongoose = require('mongoose');
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Brand:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the brand.
+ *         slug:
+ *           type: string
+ *           description: The slug of the brand.
+ *         image:
+ *           type: string
+ *           description: URL of the brand image.
+ */
 
 const brandSchema = new mongoose.Schema(
   {

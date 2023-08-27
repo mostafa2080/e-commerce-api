@@ -1,4 +1,21 @@
 const mongoose = require('mongoose');
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the category.
+ *         slug:
+ *           type: string
+ *           description: The slug of the category.
+ *         image:
+ *           type: string
+ *           description: URL of the category image.
+ */
 
 const categorySchema = new mongoose.Schema(
   {

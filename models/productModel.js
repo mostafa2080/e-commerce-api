@@ -1,4 +1,71 @@
 const mongoose = require('mongoose');
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: The title of the product.
+ *         slug:
+ *           type: string
+ *           description: The slug of the product.
+ *         description:
+ *           type: string
+ *           description: The description of the product.
+ *         quantity:
+ *           type: number
+ *           description: The quantity of the product.
+ *         sold:
+ *           type: number
+ *           description: The number of products sold.
+ *         price:
+ *           type: number
+ *           description: The price of the product.
+ *         priceAfterDiscount:
+ *           type: number
+ *           description: The price of the product after applying discounts.
+ *         colors:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: An array of available colors for the product.
+ *         imageCover:
+ *           type: string
+ *           description: The URL of the product's cover image.
+ *         images:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: An array of image URLs associated with the product.
+ *         category:
+ *           type: string
+ *           description: The ID of the category to which the product belongs.
+ *         subcategories:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: An array of subcategory IDs associated with the product.
+ *         brand:
+ *           type: string
+ *           description: The ID of the brand associated with the product.
+ *         ratingsAverage:
+ *           type: number
+ *           description: The average rating of the product.
+ *         ratingsQuantity:
+ *           type: number
+ *           description: The number of ratings for the product.
+ *       required:
+ *         - title
+ *         - slug
+ *         - description
+ *         - quantity
+ *         - price
+ *         - imageCover
+ *         - category
+ */
 
 const productSchema = mongoose.Schema(
   {

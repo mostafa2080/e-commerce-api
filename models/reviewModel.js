@@ -1,6 +1,38 @@
 const mongoose = require('mongoose');
 const Product = require('./productModel');
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Review:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: Title of the review.
+ *         ratings:
+ *           type: number
+ *           minimum: 1.0
+ *           maximum: 5.0
+ *           description: Ratings value (between 1.0 and 5.0).
+ *         user:
+ *           type: string
+ *           description: User ID to whom the review belongs.
+ *         product:
+ *           type: string
+ *           description: Product ID to which the review is associated.
+ *       required:
+ *         - ratings
+ *         - user
+ *         - product
+ *       example:
+ *         title: "Great Product"
+ *         ratings: 4.5
+ *         user: "user123"
+ *         product: "product456"
+ */
+
 const reviewSchema = new mongoose.Schema(
   {
     title: {
